@@ -5,6 +5,7 @@ from scipy.stats import poisson
 import pandas as pd
 
 from analyfits.manipufits import ADU2e
+from analyfits.manipufits import single_fits2double_fits
 from analyfits.misc import img2bw
 
 
