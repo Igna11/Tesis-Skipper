@@ -106,7 +106,10 @@ def cluster_info_extract(
         noise. mu_bkg = 0.1858 default value.
     Returns
     -------
-
+    dic: dict
+        dictionary with cluster features of the image
+    n_features: int
+        number of features found in a given image
     """
     error_message: str = "Invalid string, try 'o', 'l' or 's'"
     image_o = ADU2e(image, ohdu=ohdu)[0]
@@ -168,9 +171,18 @@ def image2cluster_info(
     mu_bkg: float, optional
         Expected value from the poissonian distribution of the background
         noise. mu_bkg = 0.1858 default value.
-    ----------
-    Returns: lista_dics, lista_b_features, lista_img_idxs
-        lista con la información
+    
+    Returns 
+    -------
+    lista_dics: list
+        list with dictionaryies of all images in list_imgs_fits.
+    lista_img_idxs: list
+        List of numpy arrays with of lenght of the total features per image,
+        with the image index en each element, e.g:
+            lista_img_idxs = [array(1,1,...,1),
+                              array(2,2,..,2),
+                              ...,
+                              array(N,N,...,N)]
     """
 
     # Armo listas donde guardo la info
