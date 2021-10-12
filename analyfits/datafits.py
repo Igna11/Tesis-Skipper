@@ -340,5 +340,5 @@ def border_events(img_path, low_th=2, ohdu=0, verbose=False):
         return charg, pixels, n_clusters
     except ValueError as e:
         if verbose:
-            print("imagen %i sin clusters entre 160 y 200 electrones" % i)
+            print("imagen sin clusters entre 160 y 200 electrones")
         return 0, 0, 0
