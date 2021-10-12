@@ -40,7 +40,7 @@ def _regionprops_data(image, labels):
     return rps
 
 
-def get_cluster_info(image, labels):
+def get_cluster_info(image, labels) -> dict:
     """
     Parameters
     ----------
@@ -78,26 +78,96 @@ def get_cluster_info(image, labels):
     return dic_props
 
 
-def image2cluster_info(fits_imgs_list, low_th=2, upp_th=300, ohdu=0, img="o"):
+def cluster_info_extract(
+    image: str, low_th=2, upp_th=300, ohdu=0, img="o", mu_bkg=0.1858
+):
+    """
+    Extracts the cluster information from image given the lower threshold,
+    upper threshold ohdu, the kind of data desired to generate (img='o',
+    'l' or 's') and mu_bkg
+
+    Parameters
+    ----------
+    image: str
+        The string path of the image to process.
+    low_th: int, optional
+        Lower threshol to remove events with less or equal charge than low_th.
+    upp_th: int, optional
+        Upper threshol to remove events with more or equal than upp_th.
+    ohdu: int, optional
+        Select the cuadrant of the sensor to analyze the image. 0, 1, 2, 3.
+    img: str, optional
+        Type of output data:
+            "o" for original clusters.
+            "l" for simulated noise with original labels <- deprecated.
+            "s" for simulated noise and new labels <- deprecated.
+    mu_bkg: float, optional
+        Expected value from the poissonian distribution of the background
+        noise. mu_bkg = 0.1858 default value.
+    Returns
+    -------
+
+    """
+    error_message: str = "Invalid string, try 'o', 'l' or 's'"
+    image_o = ADU2e(image, ohdu=ohdu)[0]
+
+    # Imagen con clústers unicamente
+    image_s = single_fits2double_fits(image, ohdu=ohdu)[1]
+    # Le agrego ruido a la imagen con clusters unicamente
+    image_s += poisson.rvs(mu_bkg, size=(50, 493))
+
+    # Binarizo ambas imagenes:
+    image_o_bw = img2bw(image_o, lower_thresh=low_th, upper_thresh=upp_th)
+    image_s_bw = img2bw(image_s, lower_thresh=low_th, upper_thresh=upp_th)
+
+    # Genero las labels y también guardo el número de features
+    label_im_o, n_features_o = ndi.label(
+        image_o_bw, structure=[[0, 1, 0], [1, 1, 1], [0, 1, 0]]
+    )
+    label_im_s, n_features_s = ndi.label(
+        image_s_bw, structure=[[0, 1, 0], [1, 1, 1], [0, 1, 0]]
+    )
+
+    # Armo el diccionario con información que devuelve get_cluster_size_etc
+    if img == "o":
+        dic = get_cluster_info(image_o, label_im_o)
+        n_features = n_features_o
+    elif img == "l":
+        dic = get_cluster_info(image_s, label_im_o)
+        n_features = n_features_o
+    elif img == "s":
+        dic = get_cluster_info(image_s, label_im_s)
+        n_features = n_features_s
+    else:
+        raise ValueError(error_message)
+
+    return dic, n_features
+
+
+def image2cluster_info(
+    fits_imgs_list, low_th=2, upp_th=300, ohdu=0, img="o", mu_bkg=0.1858
+):
     """
     Extrae la información de los clusters de todas las imágenes y lo guarda en
     listas
     Parameters
     ----------
-    fits_imgs_list : list
-        lista de directorios donde están las imágenes .fits
-    img : str - optional
-        para indicarle si va a buscar clusters:
-            "o": Busca los features en la imagen original.
-            "l": Busca los features en la imagen simulada, pero usa los labels
-            para de la imagen original.
-            "s": Busca los features de la iamgen simulada.
-    low_th : int - optional
-        lower detection threshold
-    upp_th : int - optional
-        Upper detection threshold
-    ohdu : int - optional
-        The HDU data: 0, 1, 2, 3 available
+    image: str
+        The string path of the image to process.
+    low_th: int, optional
+        Lower threshol to remove events with less or equal charge than low_th.
+    upp_th: int, optional
+        Upper threshol to remove events with more or equal than upp_th.
+    ohdu: int, optional
+        Select the cuadrant of the sensor to analyze the image. 0, 1, 2, 3.
+    img: str, optional
+        Type of output data:
+            "o" for original clusters.
+            "l" for simulated noise with original labels <- deprecated.
+            "s" for simulated noise and new labels <- deprecated.
+    mu_bkg: float, optional
+        Expected value from the poissonian distribution of the background
+        noise. mu_bkg = 0.1858 default value.
     ----------
     Returns: lista_dics, lista_b_features, lista_img_idxs
         lista con la información
@@ -108,44 +178,17 @@ def image2cluster_info(fits_imgs_list, low_th=2, upp_th=300, ohdu=0, img="o"):
     lista_n_features = []
     lista_img_idxs = []
 
-    # Hardcodeo el mu de la poissoniana
-    mu = 0.2243
-
     # recorro las imagenes que quiero usar
     for i, image in enumerate(fits_imgs_list):
-        # Imagen completa
-        image_o = ADU2e(image, ohdu=ohdu)[0]
 
-        # Imagen con clústers unicamente
-        image_s = single_fits2double_fits(image, ohdu=ohdu)[1]
-        # Le agrego ruido a la imagen con clusters unicamente
-        image_s += poisson.rvs(mu, size=(50, 493))
-
-        # Binarizo ambas imagenes:
-        image_o_bw = img2bw(image_o, lower_thresh=low_th, upper_thresh=upp_th)
-        image_s_bw = img2bw(image_s, lower_thresh=low_th, upper_thresh=upp_th)
-
-        # Genero las labels y también guardo el número de features
-        label_im_o, n_features_o = ndi.label(
-            image_o_bw, structure=[[0, 1, 0], [1, 1, 1], [0, 1, 0]]
+        dic, n_features = cluster_info_extract(
+            image,
+            low_th=low_th,
+            upp_th=upp_th,
+            ohdu=ohdu,
+            img=img,
+            mu_bkg=mu_bkg,
         )
-        label_im_s, n_features_s = ndi.label(
-            image_s_bw, structure=[[0, 1, 0], [1, 1, 1], [0, 1, 0]]
-        )
-
-        # Armo el diccionario con información que devuelve get_cluster_size_etc
-        if img == "o":
-            dic = get_cluster_info(image_o, label_im_o)
-            n_features = n_features_o
-        elif img == "l":
-            dic = get_cluster_info(image_s, label_im_o)
-            n_features = n_features_o
-        elif img == "s":
-            dic = get_cluster_info(image_s, label_im_s)
-            n_features = n_features_s
-        else:
-            print("opción incorrecta: Solo 'o', 'l', 's' son válidos")
-            return 0
         lista_dics.append(dic)
         lista_n_features.append(n_features)
         lista_img_idxs.append(np.ones(n_features) * i)
