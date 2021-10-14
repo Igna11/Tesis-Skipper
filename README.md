@@ -15,7 +15,7 @@ General analysis for clusters found in the images. Comparisons between clusters 
 Analysis of the border of the clusters, where there could be one electron events due to simply diffusion of the charge (genuine charge) or because of spurious events. Comparison between the real number of events in borders vs the expected number of events in borders.
 
 #### Analisis_Imagenes_descomposicion_eventos.ipynb
-Of course not all one electron events are due to spurious charges (e.g. dark currents), some are genuine events. So far, all analyses were being performed using the total effect of one electron events The idea of this notebook is to separate the contribution of spurious events from the total effect, and then compute the contribution of the real one electron events. That way, one could compute the expected number of real one electron events.
+Of course not all one electron events are due to spurious charges (e.g. dark currents), some are genuine events. So far, all analyses were being performed using the total effect of one electron events. The idea of this notebook is to separate the contribution of spurious events from the total effect, and then compute the contribution of the real one electron events. That way, one could compute the expected number of real one electron events.
 
 #### analyfits
 Module with the functions used (first use in Analisis_Imagenes_descomposicion_eventos.ipynb), for code ordering purposes.
@@ -26,4 +26,4 @@ Functions to extract data from .fits images
 ##### manipufits.py
 Functions to manipulate with python .fits images
 ##### misc.py
-Functions for diverse purposes, such as searching .fits files in a directory tree or thresholding any image.
+Functions for diverse purposes, such as searching .fits files in a directory tree or thresholding any image, etc.
