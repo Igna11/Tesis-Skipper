@@ -171,8 +171,8 @@ def image2cluster_info(
     mu_bkg: float, optional
         Expected value from the poissonian distribution of the background
         noise. mu_bkg = 0.1858 default value.
-    
-    Returns 
+
+    Returns
     -------
     lista_dics: list
         list with dictionaryies of all images in list_imgs_fits.

@@ -2,6 +2,7 @@ import os
 
 import numpy as np
 
+
 def regresion_lineal(X, Y):
     """
     Simple linear regression
