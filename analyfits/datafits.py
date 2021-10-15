@@ -50,7 +50,7 @@ def get_cluster_info(image, labels) -> dict:
         Array de numpy de la misma estructura dimensional que el array
         imagen. Contiene 0 donde no hay features y contiene enteros
         crecientes para etiquetar (labelear) los features.
-    ----------
+
     Returns: dict
         Diccionario con las siguientes keys:
             areas,

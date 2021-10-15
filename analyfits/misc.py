@@ -9,9 +9,7 @@ def regresion_lineal(X, Y):
     Parameters
     ----------
     X : array like
-        DESCRIPTION
     Y : array like
-        DESCRIPTION
     returns: m y b de la linea mx + b
     """
     X, Y = np.array(X), np.array(Y)
@@ -29,19 +27,15 @@ def img2bw(image, lower_thresh=None, upper_thresh=None):
     Parameters
     ----------
     image : numpy array
-        DESCRIPTION:
         Array de numpy con los datos de la imagen
     lowel_trhesh : int - float, optional
-        DESCRIPTION.
         threshold minimo para el binarizado de la imagen.
         Si nada es ingresado, entonces se toma como nulo
     upper_trhesh : int - float, optional
-        DESCRIPTION.
         threshold máximo para el binarizado de la imagen.
         Si nada es ingresado, entonces se toma como nulo
     ----------
     Returns: numpy array of bools
-        DESCRIPTION:
         array de numpy con la misma dimensionalidad que el
         input, pero con todos valores booleanos.
     """
