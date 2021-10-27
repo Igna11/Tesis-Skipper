@@ -65,7 +65,7 @@ def ADU2e(
             + ADU_img_data ** 3 * gamma
             + ADU_img_data ** 4 * delta
         )
-        #e_img_data = e_original
+        # e_img_data = e_original
         e_img_data = np.round(e_original)
         # =====================================
         # Los datos vienen con valores negativos:
