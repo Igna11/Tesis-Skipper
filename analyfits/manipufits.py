@@ -59,12 +59,14 @@ def ADU2e(
     """
     with fits.open(src_path) as fits_img:
         ADU_img_data = fits_img[ohdu].data
-        e_img_data = np.round(
+        e_original = (
             ADU_img_data * alpha
             + ADU_img_data ** 2 * beta
             + ADU_img_data ** 3 * gamma
             + ADU_img_data ** 4 * delta
         )
+        #e_img_data = e_original
+        e_img_data = np.round(e_original)
         # =====================================
         # Los datos vienen con valores negativos:
         # filtro los valores negativos y los transformo en 0
