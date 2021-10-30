@@ -52,13 +52,12 @@ def fits_finder(directorio=".", extension=".fits"):
     Parameters
     ----------
     directorio : string, optional
-        DESCRIPTION. The default is "."
-        El directorio "madre" del cual se quieren buscar las imágenes .png
-        de todos sus subdirectorios
+        The default is "." El directorio "madre" del cual se quieren buscar
+        las imágenes .png de todos sus subdirectorios
     extension : string, optional
-        DESCRIPTION. The default is ".png"
-        La extensión del tipo de archivo que se quiere buscar en los
-        subdirectorios. Es necesario usar ".extension": EJ: ".png", ".jpg"
+        The default is ".png". La extensión del tipo de archivo que se quiere
+        buscar en los subdirectorios. Es necesario usar ".extension": EJ: 
+        ".png", ".jpg"
     Returns: string de directorios y archivos .png
     """
     archivos = []
