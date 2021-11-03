@@ -87,9 +87,9 @@ class ManipulateFits:
         self.elec_major = electron_fits.copy()
 
         # All pixels with a number of electrons > threshold are set to 0
-        self.elec_minor[elec_minor > threshold] = 0
+        self.elec_minor[self.elec_minor > threshold] = 0
         # All pixels with a number of electrons < threshold are set to 0
-        self.elec_major[elec_major <= threshold] = 0
+        self.elec_major[self.elec_major <= threshold] = 0
 
 
         return self.elec_minor, self.elec_major
