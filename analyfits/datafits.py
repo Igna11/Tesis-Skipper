@@ -4,10 +4,10 @@ from scipy import ndimage as ndi
 from scipy.stats import poisson
 import pandas as pd
 
+from analyfits.manipufits import ManipulateFits
 from analyfits.manipufits import ADU2e
 from analyfits.manipufits import single_fits2double_fits
 from analyfits.misc import img2bw
-
 
 def _regionprops_data(image, labels):
     """
@@ -112,16 +112,18 @@ def cluster_info_extract(
         number of features found in a given image
     """
     error_message: str = "Invalid string, try 'o', 'l' or 's'"
-    image_o = ADU2e(image, ohdu=ohdu)[0]
+    Image = ManipulateFits()
+    Image.set_ohdu(ohdu)
+    image_o = Image.ADU2e(image)
 
     # Imagen con clústers unicamente
-    image_s = single_fits2double_fits(image, ohdu=ohdu)[1]
+    image_s = Image.single_fits2double_fits(image)[1]
     # Le agrego ruido a la imagen con clusters unicamente
     image_s += poisson.rvs(mu_bkg, size=(50, 493))
 
     # Binarizo ambas imagenes:
-    image_o_bw = img2bw(image_o, lower_thresh=low_th, upper_thresh=upp_th)
-    image_s_bw = img2bw(image_s, lower_thresh=low_th, upper_thresh=upp_th)
+    image_o_bw = img2bw(image_o, low_th=low_th, upp_th=upp_th)
+    image_s_bw = img2bw(image_s, low_th=low_th, upp_th=upp_th)
 
     # Genero las labels y también guardo el número de features
     label_im_o, n_features_o = ndi.label(
@@ -275,9 +277,11 @@ def border_events(img_path, low_th=2, ohdu=0, verbose=False):
         Total number of clusters
     """
     # Cargo la imagen
-    img = ADU2e(img_path, ohdu=ohdu)[0]
+    Image = ManipulateFits()
+    Image.set_ohdu(ohdu)
+    img = Image.ADU2e(img_path)
     # binarizo con thresh=2 equivalente a epix 1.5
-    img_bw = img2bw(img, lower_thresh=2)
+    img_bw = img2bw(img, low_th=2)
     # Structura
     struc = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
 

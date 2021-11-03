@@ -21,7 +21,7 @@ def regresion_lineal(X, Y):
     return m, b
 
 
-def img2bw(image, lower_thresh=None, upper_thresh=None):
+def img2bw(image, low_th=None, upp_th=None):
     """
     Binariza la imagen ingresada según el threshold dado:
     Parameters
@@ -39,11 +39,11 @@ def img2bw(image, lower_thresh=None, upper_thresh=None):
         array de numpy con la misma dimensionalidad que el
         input, pero con todos valores booleanos.
     """
-    if lower_thresh is None:
-        lower_thresh = 0
-    if upper_thresh is None:
-        upper_thresh = np.max(image) + 1
-    return (image >= lower_thresh) & (image <= upper_thresh)
+    if not low_th:
+        low_th = 0
+    if not upp_th:
+        upp_th = np.max(image) + 1
+    return (image >= low_th) & (image <= upp_th)
 
 
 def fits_finder(directorio=".", extension=".fits"):

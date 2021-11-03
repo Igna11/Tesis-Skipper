@@ -6,23 +6,23 @@ from analyfits import calibration
 class ManipulateFits:
 
     def __init__(self):
-        self.ohdu: int = 0
-        self.alpha: float = calibration.ALPHA
-        self.beta: float = calibration.BETA
-        self.gamma: float = calibration.GAMMA
-        self.delta: float = calibration.DELTA
+        self._ohdu: int = 0
+        self._alpha: float = calibration.ALPHA
+        self._beta: float = calibration.BETA
+        self._gamma: float = calibration.GAMMA
+        self._delta: float = calibration.DELTA
 
 
     def set_calibration(self, alpha, beta, gamma, delta):
         """Sets the desired calibration"""
-        self.alpha = alpha
-        self.beta = beta
-        self.gamma = gamma
-        self.delta = delta
+        self._alpha = alpha
+        self._beta = beta
+        self._gamma = gamma
+        self._delta = delta
 
     def set_ohdu(self, ohdu):
         """Set the desired OHDU to use in the analysis"""
-        self.ohdu = ohdu
+        self._ohdu = ohdu
 
     def ADU2e(self, src_path, ADU=False):
         """
@@ -42,12 +42,12 @@ class ManipulateFits:
         e_img_data
         """
         with fits.open(src_path) as fits_img:
-            self.ADU_img_data = fits_img[self.ohdu].data
+            self.ADU_img_data = fits_img[self._ohdu].data
             e_original = (
-                self.ADU_img_data * self.alpha
-                + self.ADU_img_data ** 2 * self.beta
-                + self.ADU_img_data ** 3 * self.gamma
-                + self.ADU_img_data ** 4 * self.delta
+                self.ADU_img_data * self._alpha
+                + self.ADU_img_data ** 2 * self._beta
+                + self.ADU_img_data ** 3 * self._gamma
+                + self.ADU_img_data ** 4 * self._delta
             )
             # e_img_data = e_original
             self.e_img_data = np.round(e_original)
@@ -104,7 +104,7 @@ class ManipulateFits:
             pathname for the new file
         """
         with fits.open(src_path) as fits_img:
-            fits_img[self.ohdu].data = self.e_img_data
+            fits_img[self._ohdu].data = self.e_img_data
             try:
                 fits_img.writeto(tgt_path)
             except OSError as e:
