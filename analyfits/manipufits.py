@@ -3,15 +3,14 @@ from astropy.io import fits
 
 from analyfits import calibration
 
-class ManipulateFits:
 
+class ManipulateFits:
     def __init__(self):
         self._ohdu: int = 0
         self._alpha: float = calibration.ALPHA
         self._beta: float = calibration.BETA
         self._gamma: float = calibration.GAMMA
         self._delta: float = calibration.DELTA
-
 
     def set_calibration(self, alpha, beta, gamma, delta):
         """Sets the desired calibration"""
@@ -51,7 +50,7 @@ class ManipulateFits:
             )
             # e_img_data = e_original
             self.e_img_data = np.round(e_original)
-            
+
             # cleaning of negative values
             if ADU:
                 self.ADU_img_data[self.ADU_img_data < 0] = 0
@@ -91,7 +90,6 @@ class ManipulateFits:
         # All pixels with a number of electrons < threshold are set to 0
         self.elec_major[self.elec_major <= threshold] = 0
 
-
         return self.elec_minor, self.elec_major
 
     def save_fits(self, src_path, tgt_path):
@@ -114,8 +112,10 @@ class ManipulateFits:
     def easy_plot(self, cmap="hot", vmin=0, vmax=10):
         """Shortcut to watch the image"""
         import matplotlib.pyplot as plt
+
         plt.figure(figsize=(17, 2))
         plt.imshow(self.e_img_data, cmap=cmap, vmin=vmin, vmax=vmax)
+
 
 def _fits_saver(fits_image, tgt_path="", ohdu=0):
     """

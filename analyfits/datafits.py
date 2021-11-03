@@ -9,6 +9,7 @@ from analyfits.manipufits import ADU2e
 from analyfits.manipufits import single_fits2double_fits
 from analyfits.misc import img2bw
 
+
 def _regionprops_data(image, labels):
     """
     This function must only be called by another functions:

@@ -56,7 +56,7 @@ def fits_finder(directorio=".", extension=".fits"):
         las imágenes .png de todos sus subdirectorios
     extension : string, optional
         The default is ".png". La extensión del tipo de archivo que se quiere
-        buscar en los subdirectorios. Es necesario usar ".extension": EJ: 
+        buscar en los subdirectorios. Es necesario usar ".extension": EJ:
         ".png", ".jpg"
     Returns: string de directorios y archivos .png
     """
