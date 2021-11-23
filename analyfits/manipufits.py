@@ -7,22 +7,28 @@ from analyfits.calibration import Calibration
 
 class ManipulateFits:
     def __init__(self):
-        cal = Calibration(calibration.OHDU_1)
-        self._ohdu: int = 0
-        self._alpha: float = cal.ALPHA
-        self._beta: float = cal.BETA
-        self._gamma: float = cal.GAMMA
-        self._delta: float = cal.DELTA
+        """
+        Initialices the calibration for the OHDU 1 (numered as 0 in code)
+        which is the most frequently used calibration
+        """
+        self._ohdu = 0
+        self._alpha = 1.9848e-3
+        self._beta = -9.77376e-11
+        self._gamma = 1.87747e-15
+        self._delta = -7.08404e-21
 
     def set_calibration(self, alpha, beta, gamma, delta):
-        """Sets a custom calibration"""
+        """Sets a custom calibration if needed"""
         self._alpha = alpha
         self._beta = beta
         self._gamma = gamma
         self._delta = delta
 
     def set_ohdu(self, ohdu):
-        """Set the desired OHDU to use in the analysis"""
+        """
+        Sets the desired OHDU to use in the analysis and picks the correct
+        calibration.
+        """
         self._ohdu = ohdu
         if ohdu == 0:
             OHDUObject = calibration.OHDU_1
@@ -91,8 +97,10 @@ class ManipulateFits:
             The default is 1.
         Returns
         -------
-        None.
-
+        elec_minor : np.array
+            The matrix array of the image with minor number of events per pixel
+        elec_major : np.array
+            The matrix array of the image with major number of events per pixel
         """
         electron_fits = self.ADU2e(src_path)
 
@@ -125,7 +133,7 @@ class ManipulateFits:
                 print("A file with the same name already exists.")
 
     def easy_plot(self, cmap="hot", vmin=0, vmax=10):
-        """Shortcut to watch the image"""
+        """Shortcut to watch the original image"""
         import matplotlib.pyplot as plt
 
         plt.figure(figsize=(17, 2))
