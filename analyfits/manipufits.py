@@ -6,6 +6,42 @@ from analyfits.calibration import Calibration
 
 
 class ManipulateFits:
+    """
+    A class to do basic manipulation of .fits images.
+
+    Attributes
+    ----------
+    _ohdu : int
+        number of the sensor quadrant
+    _alpha : float
+    _beta : float
+    _gamma : float
+    _delta : float
+        _alpha, _beta, _gamma, _delta all coefficients of the polynomial fit
+        for the calibration e vs ADU's
+    ADU_img_data : numpy array
+        numpy matrix array of the image
+    e_img_data : numpy array
+        numpy matrix array of the image
+
+    Methods
+    -------
+    set_calibration(alpha, beta, gamma, delta):
+        Use it to define a custom calibration on the go, if needed.
+    set_ohdu(ohdu):
+        Sets the desired OHDU to use in the analysis and picks the correct
+        calibration.
+    ADU2e(src_path, ADU=False):
+        Use the polynomial fit to convert from ADU's (original data in image)
+        to electrons e.
+    single_fits2double_fits(src_path, threshold=1):
+        Uses ADU2e to convert from ADU's to electrons and separates the image
+        into 2 different images using the given threshold
+    save_fits(src_path, tgt_path):
+        Saves into a .fits file the image transformed from ADU's to e.
+    easy_plot(cmap="hot", vmin=0, vmax=10):
+        Makes a plot of the original image.
+    """
     def __init__(self):
         """
         Initialices the calibration for the OHDU 1 (numered as 0 in code)
@@ -16,6 +52,8 @@ class ManipulateFits:
         self._beta = -9.77376e-11
         self._gamma = 1.87747e-15
         self._delta = -7.08404e-21
+        self.ADU_img_data = None
+        self.e_img_data = None
 
     def set_calibration(self, alpha, beta, gamma, delta):
         """Sets a custom calibration if needed"""
@@ -105,15 +143,15 @@ class ManipulateFits:
         electron_fits = self.ADU2e(src_path)
 
         # make some copies of the original data to modify it avoiding aliasing
-        self.elec_minor = electron_fits.copy()
-        self.elec_major = electron_fits.copy()
+        elec_minor = electron_fits.copy()
+        elec_major = electron_fits.copy()
 
         # All pixels with a number of electrons > threshold are set to 0
-        self.elec_minor[self.elec_minor > threshold] = 0
+        elec_minor[elec_minor > threshold] = 0
         # All pixels with a number of electrons < threshold are set to 0
-        self.elec_major[self.elec_major <= threshold] = 0
+        elec_major[elec_major <= threshold] = 0
 
-        return self.elec_minor, self.elec_major
+        return elec_minor, elec_major
 
     def save_fits(self, src_path, tgt_path):
         """
