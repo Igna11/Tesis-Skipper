@@ -129,10 +129,10 @@ def cluster_info_extract(
 
     # Genero las labels y también guardo el número de features
     label_im_o, n_features_o = ndi.label(
-        image_o_bw, structure=[[0, 1, 0], [1, 1, 1], [0, 1, 0]]
+        image_o_bw, structure=[[1, 1, 1], [1, 1, 1], [1, 1, 1]]
     )
     label_im_s, n_features_s = ndi.label(
-        image_s_bw, structure=[[0, 1, 0], [1, 1, 1], [0, 1, 0]]
+        image_s_bw, structure=[[1, 1, 1], [1, 1, 1], [1, 1, 1]]
     )
 
     # Armo el diccionario con información que devuelve get_cluster_size_etc
