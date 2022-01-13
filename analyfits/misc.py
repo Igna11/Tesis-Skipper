@@ -23,7 +23,11 @@ def regresion_lineal(X, Y):
 
 def img2bw(image, low_th=None, upp_th=None):
     """
-    Binariza la imagen ingresada según el threshold dado:
+    Binarize the given image according to the given threshold. The lower and
+    the upper threshold are included as True's in the returned matrix:
+    e.g: 
+        low_th = 4, upp_th = 6 -> 3 = False, 4, 5, and 6 = True, 7 = False and
+        so on.
     Parameters
     ----------
     image : numpy array
