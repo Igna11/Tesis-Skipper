@@ -42,6 +42,7 @@ class ManipulateFits:
     easy_plot(cmap="hot", vmin=0, vmax=10):
         Makes a plot of the original image.
     """
+
     def __init__(self):
         """
         Initialices the calibration for the OHDU 1 (numered as 0 in code)
@@ -55,14 +56,14 @@ class ManipulateFits:
         self.ADU_img_data = None
         self.e_img_data = None
 
-    def set_calibration(self, alpha, beta, gamma, delta):
+    def set_calibration(self, alpha, beta, gamma, delta) -> None:
         """Sets a custom calibration if needed"""
         self._alpha = alpha
         self._beta = beta
         self._gamma = gamma
         self._delta = delta
 
-    def set_ohdu(self, ohdu):
+    def set_ohdu(self, ohdu) -> None:
         """
         Sets the desired OHDU to use in the analysis and picks the correct
         calibration.
@@ -82,7 +83,7 @@ class ManipulateFits:
         self._gamma = cal.GAMMA
         self._delta = cal.DELTA
 
-    def ADU2e(self, src_path, ADU=False):
+    def ADU2e(self, src_path, ADU=False) -> np.array:
         """
         From a .fits image, and using the polynomial fit for ADU -> electron
         returns either both image data:
@@ -119,7 +120,9 @@ class ManipulateFits:
 
         return self.e_img_data
 
-    def single_fits2double_fits(self, src_path, threshold=1):
+    def single_fits2double_fits(
+        self, src_path, threshold=1
+    ) -> tuple([np.array, np.array]):
         """
         From one .fits image generates 2 different images and optionally
         generates 2 new fits files to be saved.
@@ -153,7 +156,7 @@ class ManipulateFits:
 
         return elec_minor, elec_major
 
-    def save_fits(self, src_path, tgt_path):
+    def save_fits(self, src_path, tgt_path) -> None:
         """
         Saves the fits_image data in units of electrons only, into the
         given tgt_path
@@ -170,7 +173,7 @@ class ManipulateFits:
                 print(e)
                 print("A file with the same name already exists.")
 
-    def easy_plot(self, cmap="hot", vmin=0, vmax=10):
+    def easy_plot(self, cmap="hot", vmin=0, vmax=10) -> None:
         """Shortcut to watch the original image"""
         import matplotlib.pyplot as plt
 

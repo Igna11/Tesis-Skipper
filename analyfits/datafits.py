@@ -80,7 +80,49 @@ def get_cluster_info(image, labels) -> dict:
     return dic_props
 
 
-def cluster_info_extract(
+def cluster_info_extract(input_image: str, low_th=2, upp_th=300, ohdu=0) -> tuple([dict, list]):
+    """
+    Extracts the cluster information from image given the lower threshold,
+    upper threshold ohdu
+
+    Parameters
+    ----------
+    image: str
+        The string path of the image to process.
+    low_th: int, optional
+        Lower threshol to remove events with less or equal charge than low_th.
+    upp_th: int, optional
+        Upper threshol to remove events with more or equal than upp_th.
+    ohdu: int, optional
+        Select the cuadrant of the sensor to analyze the image. 0, 1, 2, 3.
+    Returns                                                       img="o",
+
+    -------
+    dic: dict
+        dictionary with cluster features of the image
+    n_features: int
+        number of features found in a given image
+    """
+    # Creo el objeto
+    Image = ManipulateFits()
+    # Seteo el OHDU que voy a usar
+    Image.set_ohdu(ohdu)
+    # Abro la imagen completa
+    image = Image.ADU2e(input_image)
+    # Binarizo la imagen con el threshold deseado
+    image_bw = img2bw(image, low_th=low_th, upp_th=upp_th)
+    # Genero las labels y también guardo el número de features
+    label_im, n_features = ndi.label(
+        image_bw, structure=[[1, 1, 1], [1, 1, 1], [1, 1, 1]]
+    )
+    # Armo el diccionario con información que devuelve get_cluster_size_etc
+    dic = get_cluster_info(image, label_im)
+    n_features = n_features
+
+    return dic, n_features
+
+
+def cluster_info_extract_and_sim(
     image: str, low_th=2, upp_th=300, ohdu=0, img="o", mu_bkg=0.1858
 ):
     """
@@ -152,8 +194,60 @@ def cluster_info_extract(
 
 
 def image2cluster_info(
+    fits_imgs_list, low_th=2, upp_th=300, ohdu=0) -> tuple([list, list]):
+    """
+    Extrae la información de los clusters de todas las imágenes y lo guarda en
+    listas
+    Parameters
+    ----------
+    image: str
+        The string path of the image to process.
+    low_th: int, optional
+        Lower threshol to remove events with less or equal charge than low_th.
+    upp_th: int, optional
+        Upper threshol to remove events with more or equal than upp_th.
+    ohdu: int, optional
+        Select the cuadrant of the sensor to analyze the image. 0, 1, 2, 3.
+    Returns
+    -------
+    lista_dics: list
+        list with dictionaryies of all images in list_imgs_fits.
+    lista_img_idxs: list
+        List of numpy arrays with of lenght of the total features per image,
+        with the image index en each element, e.g:
+            lista_img_idxs = [array(1,1,...,1),
+                              array(2,2,..,2),
+                              ...,
+                              array(N,N,...,N)]
+    """
+
+    # Armo listas donde guardo la info
+    lista_dics = []
+    lista_n_features = []
+    lista_img_idxs = []
+    n = len(fits_imgs_list)
+    # recorro las imagenes que quiero usar
+    for i, image in enumerate(fits_imgs_list):
+
+        dic, n_features = cluster_info_extract(
+            image,
+            low_th=low_th,
+            upp_th=upp_th,
+            ohdu=ohdu,
+        )
+        lista_dics.append(dic)
+        lista_n_features.append(n_features)
+        lista_img_idxs.append(np.ones(n_features) * i)
+        # Printeo el progreso del ciclo for
+        
+        print("\r%.2f%%" % (100 * (i + 1) / n), end="")
+
+    return lista_dics, lista_img_idxs
+
+
+def image2cluster_info_and_sim(
     fits_imgs_list, low_th=2, upp_th=300, ohdu=0, img="o", mu_bkg=0.1858
-):
+) -> tuple([list, list]):
     """
     Extrae la información de los clusters de todas las imágenes y lo guarda en
     listas
@@ -197,7 +291,7 @@ def image2cluster_info(
     # recorro las imagenes que quiero usar
     for i, image in enumerate(fits_imgs_list):
 
-        dic, n_features = cluster_info_extract(
+        dic, n_features = cluster_info_extract_and_sim(
             image,
             low_th=low_th,
             upp_th=upp_th,
@@ -214,7 +308,7 @@ def image2cluster_info(
     return lista_dics, lista_img_idxs
 
 
-def df_gen(lista_dics, lista_img_idxs):
+def df_gen(lista_dics, lista_img_idxs) -> pd.DataFrame:
     """
     Esta función arma a partir de la listas de información un DataFrame de
     pandas para manipular la información más comodamente
