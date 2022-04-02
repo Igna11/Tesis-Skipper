@@ -124,8 +124,7 @@ class ManipulateFits:
         self, src_path, threshold=1
     ) -> tuple([np.array, np.array]):
         """
-        From one .fits image generates 2 different images and optionally
-        generates 2 new fits files to be saved.
+        From one .fits image generates 2 different images.
 
         Parameters
         ----------
@@ -151,7 +150,7 @@ class ManipulateFits:
 
         # All pixels with a number of electrons > threshold are set to 0
         elec_minor[elec_minor > threshold] = 0
-        # All pixels with a number of electrons < threshold are set to 0
+        # All pixels with a number of electrons <= threshold are set to 0
         elec_major[elec_major <= threshold] = 0
 
         return elec_minor, elec_major
