@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 
-def regresion_lineal(X, Y):
+def regresion_lineal(X, Y) -> tuple([float, float]):
     """
     Simple linear regression
     Parameters
@@ -21,7 +21,7 @@ def regresion_lineal(X, Y):
     return m, b
 
 
-def img2bw(image, low_th=None, upp_th=None):
+def img2bw(image, low_th=None, upp_th=None) -> np.array:
     """
     Binarize the given image according to the given threshold. The lower and
     the upper threshold are included as True's in the returned matrix:
@@ -31,17 +31,17 @@ def img2bw(image, low_th=None, upp_th=None):
     Parameters
     ----------
     image : numpy array
-        Array de numpy con los datos de la imagen
+        Numpy array with the image data.
     lowel_trhesh : int - float, optional
-        threshold minimo para el binarizado de la imagen.
-        Si nada es ingresado, entonces se toma como nulo
+        Minimal threshold for binarizing the image.
+        If none given, default values is None.
     upper_trhesh : int - float, optional
-        threshold máximo para el binarizado de la imagen.
-        Si nada es ingresado, entonces se toma como nulo
+        Maximal threshold for binarizing the image.
+        If none given, default value is None
     ----------
     Returns: numpy array of bools
-        array de numpy con la misma dimensionalidad que el
-        input, pero con todos valores booleanos.
+        Numpy array with the same dimensionality as the input, but with all
+        boolean values.
     """
     if not low_th:
         low_th = 0
@@ -50,27 +50,28 @@ def img2bw(image, low_th=None, upp_th=None):
     return (image >= low_th) & (image <= upp_th)
 
 
-def fits_finder(directorio=".", extension=".fits"):
+def fits_finder(path=".", extension=".fits") -> list:
     """
     Finds all .fits images in the current working tree
     Parameters
     ----------
-    directorio : string, optional
-        The default is "." El directorio "madre" del cual se quieren buscar
-        las imágenes .png de todos sus subdirectorios
+    path : string, optional
+        The default is "." The main path where to search files with given
+        extension.
     extension : string, optional
-        The default is ".png". La extensión del tipo de archivo que se quiere
-        buscar en los subdirectorios. Es necesario usar ".extension": EJ:
-        ".png", ".jpg"
-    Returns: string de directorios y archivos .png
+        The default is ".png". The files' extension to be search in
+        subdirectories.
+        e.g: 
+            ".png", ".jpg"
+    Returns: file paths
     """
-    archivos = []
-    for root, dirs, files in os.walk(directorio):
+    file_paths = []
+    for root, dirs, files in os.walk(path):
         for name in files:
             path = os.path.join(root, name)
             size = os.stat(path).st_size / 1000
             if (
                 path.endswith(extension) and size < 500
             ):  # agregar que busque las que arrancan con proc
-                archivos.append(path)
-    return archivos
+                file_paths.append(path)
+    return file_paths
