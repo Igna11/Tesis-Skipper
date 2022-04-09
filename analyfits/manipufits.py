@@ -83,6 +83,17 @@ class ManipulateFits:
         self._gamma = cal.GAMMA
         self._delta = cal.DELTA
 
+    def get_params(self) -> None:
+        print("Quadrant:")
+        print("-" * 20)
+        print("OHDU: ", self._ohdu)
+        print("\ncalibration:")
+        print("-" * 20)
+        print("Alpha: ", self._alpha)
+        print("Beta: ", self._beta)
+        print("Gamma: ", self._gamma)
+        print("Delta: ", self._delta)
+
     def ADU2e(self, src_path, ADU=False) -> np.array:
         """
         From a .fits image, and using the polynomial fit for ADU -> electron
