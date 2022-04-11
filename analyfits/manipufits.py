@@ -2,7 +2,6 @@ import numpy as np
 from astropy.io import fits
 
 from analyfits import calibration
-from analyfits.calibration import Calibration
 
 
 class ManipulateFits:
@@ -77,7 +76,7 @@ class ManipulateFits:
             OHDUObject = calibration.OHDU_3
         elif ohdu == 3:
             OHDUObject = calibration.OHDU_4
-        cal = Calibration(OHDUObject)
+        cal = calibration.Calibration(OHDUObject)
         self._alpha = cal.ALPHA
         self._beta = cal.BETA
         self._gamma = cal.GAMMA
