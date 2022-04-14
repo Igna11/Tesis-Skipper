@@ -7,31 +7,31 @@ version: 03/10/2021
 
 
 class OHDU_1:
-    ALPHA = 1.9848e-3
-    BETA = -9.77376e-11
-    GAMMA = 1.87747e-15
-    DELTA = -7.08404e-21
+    ALPHA = 2.02239e-3
+    BETA = 5.09616e-11
+    GAMMA = 2.37466e-16
+    DELTA = -8.59986e-22
 
 
 class OHDU_2:
-    ALPHA = 2.0577e-3
-    BETA = -1.88216e-09
-    GAMMA = 1.77606e-14
-    DELTA = -7.29647e-20
+    ALPHA = 1.95224e-3
+    BETA = 3.39492e-11
+    GAMMA = -3.02458e-16
+    DELTA = 4.15541e-22
 
 
 class OHDU_3:
-    ALPHA = 1.65799e-3
-    BETA = -1.26944e-10
-    GAMMA = 1.19425e-15
-    DELTA = -3.83054e-21
+    ALPHA = 1.68488e-3
+    BETA = 5.82793e-11
+    GAMMA = -2.94793e-16
+    DELTA = 5.3502e-22
 
 
 class OHDU_4:
-    ALPHA = 2.14969e-3
-    BETA = -1.09097e-08
-    GAMMA = 1.13386e-13
-    DELTA = -4.02504e-19
+    ALPHA = 1.78221e-3
+    BETA = -8.09364e-11
+    GAMMA = 1.02599e-16
+    DELTA = 3.55681e-22
 
 
 class Calibration:
