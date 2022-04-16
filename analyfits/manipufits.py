@@ -48,10 +48,10 @@ class ManipulateFits:
         which is the most frequently used calibration
         """
         self._ohdu = 0
-        self._alpha = 1.9848e-3
-        self._beta = -9.77376e-11
-        self._gamma = 1.87747e-15
-        self._delta = -7.08404e-21
+        self._alpha = 2.02239e-3
+        self._beta = 5.09616e-11
+        self._gamma = 2.37466e-16
+        self._delta = -8.59986e-22
         self.ADU_img_data = None
         self.e_img_data = None
 

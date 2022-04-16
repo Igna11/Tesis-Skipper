@@ -3,6 +3,9 @@ Calibration of the polynomial coefficients for fitting ADU's vs Electrons
 ref: ske_Calibration_T123k.txt
 ref: Tesis Kevin Anderson, tabla 3.1: alpha = 1.99e-3
 version: 03/10/2021
+version: 16/04/2022
+NOTA: Si se modifica esta versión de la calibración también hay que modificar
+la calibración por defecto en manipufits.py!
 """
 
 
